@@ -1,0 +1,223 @@
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Farmer Details</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;
+            color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 40px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        /* Main Content */
+        .main {
+            margin-left: 260px;
+            padding: 40px;
+        }
+
+        .box {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 402px;
+        }
+
+        .box h1 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .box p {
+            text-align: center;
+            font-size: 16px;
+            color: #777;
+            margin-bottom: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-top: 8px;
+            margin-bottom: 5px;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .error {
+            color: #ff0000;
+            font-size: 14px;
+        }
+
+        input[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 210px;
+            }
+
+            .box {
+                padding: 20px;
+            }
+
+            .box h1 {
+                font-size: 28px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+
+
+    <!-- Main Content -->
+    <div class="main">
+        <div class="box">
+            <h1>Update Farmer Details</h1>
+            <p class="text-muted">Please update your information below</p>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="id_first_name" class="form-label">First Name</label>
+                    {% render_field userForm.first_name class="form-control" placeholder="Enter your first name" %}
+                    {% if userForm.first_name.errors %}
+                        <div class="error">{{ userForm.first_name.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_last_name" class="form-label">Last Name</label>
+                    {% render_field userForm.last_name class="form-control" placeholder="Enter your last name" %}
+                    {% if userForm.last_name.errors %}
+                        <div class="error">{{ userForm.last_name.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_username" class="form-label">Username</label>
+                    {% render_field userForm.username class="form-control" placeholder="Enter your username" %}
+                    {% if userForm.username.errors %}
+                        <div class="error">{{ userForm.username.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password" class="form-label">Password (Leave blank to keep current)</label>
+                    {% render_field userForm.password class="form-control" %}
+                    {% if userForm.password.errors %}
+                        <div class="error">{{ userForm.password.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_address" class="form-label">Address</label>
+                    {% render_field farmerForm.address class="form-control" placeholder="Enter your address" %}
+                    {% if farmerForm.address.errors %}
+                        <div class="error">{{ farmerForm.address.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_mobile" class="form-label">Mobile</label>
+                    {% render_field farmerForm.mobile class="form-control" placeholder="Enter your mobile number" %}
+                    {% if farmerForm.mobile.errors %}
+                        <div class="error">{{ farmerForm.mobile.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_profile_pic" class="form-label">Profile Picture</label>
+                    {% render_field farmerForm.profile_pic class="form-control" %}
+                    {% if farmerForm.profile_pic.errors %}
+                        <div class="error">{{ farmerForm.profile_pic.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <input type="submit" value="Save Changes">
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

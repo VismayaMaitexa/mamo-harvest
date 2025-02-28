@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <title>Farmer Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            background-color: #9fb7e7;
+        }
+
+        .sidebar {
+            width: 210px;
+            background: #1f2937;
+            color: #f3f4f6;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: normal;
+        }
+
+        .sidebar a {
+            color: #f3f4f6;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            transition: background 0.3s, padding-left 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: #4f46e5;
+            padding-left: 20px;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+        }
+
+        .main {
+            margin-left: 230px;
+            padding: 20px;
+            flex-grow: 1;
+            transition: margin-left 0.3s;
+        }
+
+        .header {
+            background: #4a5568;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .product-container {
+            margin-top: 40px;
+            padding: 40px;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-container h2 {
+            font-size: 1.8rem;
+            color: #2d3748;
+            margin-top: 0;
+            margin-bottom: 40px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .product-links {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .product-links a {
+            display: inline-block;
+            padding: 18px 35px;
+            background: #4f46e5;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: background 0.3s, transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-links a:hover {
+            background: #3730a3;
+            transform: translateY(-4px);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+            }
+
+            .main {
+                margin-left: 100px;
+            }
+
+            .product-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>Farmer Dashboard</h2>
+        <a href="{% url 'farmer_profile' %}"><i class="fas fa-user"></i> Profile</a> 
+        <a href="{% url 'products' %}"><i class="fas fa-shopping-basket"></i> Products</a>
+        <a href="{% url 'managecrops' %}"><i class="fas fa-seedling"></i> Manage Crops</a>
+        <a href="{% url 'farmer_orders' farmer_id=request.user.id %}">
+            <i class="fas fa-shopping-cart"></i> Orders
+        </a>        <a href="{% url 'back' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <div class="main">
+        <div class="header">
+            <h1>Manage Your Farming Activities</h1>
+        </div>
+
+        <div class="product-container">
+            <h2>Product Management</h2>
+            <div class="product-links">
+                <a href="{% url 'addproduct' %}">Add Product</a>
+                <a href="{% url 'viewproduct' %}">View Products</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Order History</title>
+    <style>
+        /* Reset some default styles */
+        body, h1, h2, h3, p, ul, li {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Set a background color for the whole page */
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Center the container and give it some padding */
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header styles */
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #007BFF;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+        }
+
+        /* Main section styles */
+        main {
+            margin: 20px 0;
+        }
+
+        section h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #007BFF;
+        }
+
+        /* Order list styles */
+        .order-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .order-list li {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            padding: 15px;
+        }
+
+        .order-list li h3 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #007BFF;
+        }
+
+        .order-list li p {
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+
+        /* Products list styles inside each order */
+        .order-list li ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .order-list li ul li {
+            padding: 5px 0;
+        }
+
+        /* Footer styles */
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+        }
+
+        footer p {
+            font-size: 0.9em;
+        }
+
+        /* Responsive styles for smaller screens */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 10px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            section h2 {
+                font-size: 1.5em;
+            }
+
+            .order-list li {
+                padding: 10px;
+            }
+
+            footer p {
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Order History</h1>
+        </header>
+
+        <main>
+            <section>
+                <h2>Your Orders</h2>
+                {% if orders %}
+                    <ul class="order-list">
+                        {% for order in orders %}
+                            <li>
+                                <h3>Order #{{ order.id }}</h3>
+                                <p>Status: {{ order.status }}</p>
+                                <p>Date: {{ order.date|date:"d/m/Y" }}</p>
+                                <p>Tracking Number: {% if order.tracking_number %}{{ order.tracking_number }}{% else %}Not available{% endif %}</p>
+                                <p>Shipping Address: {{ order.address }}</p>
+                                <p>Products: 
+                                    <ul>
+                                        {% for product in order.products.all %}
+                                            <li>
+                                                {{ product.product.name }} - ${{ product.product.price|floatformat:2 }} 
+                                                (Quantity: {{ product.quantities }}) 
+                                                <strong>Subtotal:</strong> ${{ product.subtotal|floatformat:2 }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </p>
+                                <p><strong>Total Price:</strong> ${{ order.total_price|floatformat:2 }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>You have no orders yet.</p>
+                {% endif %}
+            </section>
+        </main>
+    </div>
+</body>
+</html>

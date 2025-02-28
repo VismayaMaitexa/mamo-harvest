@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Harvest Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            background-color: #e0e7ff;
+            background-image: url('../static/images/veg.jfif');
+        }
+        .sidebar {
+            width: 210px;
+            background: #1f2937;
+            color: #f3f4f6;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: normal;
+            color:#f3f4f6;
+        }
+        .sidebar a {
+            color: #f3f4f6;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            transition: background 0.3s, padding-left 0.3s;
+        }
+        .sidebar a:hover {
+            background: #4f4ee5;
+            padding-left: 20px;
+        }
+        .sidebar a i {
+            margin-right: 10px;
+        }
+        .main {
+            margin-left: 230px;
+            padding: 20px;
+            flex-grow: 1;
+            transition: margin-left 0.3s;
+        }
+        .header {
+            background: #616e81;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            margin-left: 15px;
+        }
+        .content {
+            margin-top: 20px;
+        }
+        .card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+            color: #1f2937;
+        }
+        .card p {
+            color: #6b7280;
+        }
+        .card .stats {
+            display: flex;
+            justify-content: space-between;
+        }
+        .moving-text {
+            background: #10b981;
+            color: white;
+            padding: 10px;
+            position: absolute;
+            top: 10px;
+            white-space: nowrap;
+            animation: move 10s linear infinite;
+        }
+        @keyframes move {
+            from { left: 100%; }
+            to { left: -70%; }
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100px;
+            }
+            .main {
+                margin-left: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>User Dashboard</h2>
+    <a href="{% url 'profile' %}"><i class="fas fa-user"></i>Profile</a>
+    <a href="{% url 'product' %}"><i class="fas fa-shopping-basket"></i> Product</a>
+    <a href="{% url 'view_wishlist' %}"><i class="fas fa-heart"></i>Wishlist</a>
+    <a href="{% url 'view_cart' %}"><i class="fas fa-shopping-cart"></i>Cart</a>
+
+    <a href="{% url 'myorders' %}"><i class="fas fa-shopping-cart"></i> My Orders</a>
+    <a href="{% url 'back' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+</div>
+
+<div class="main">
+    <div class="header">
+        <h1>Welcome, {{user.username}}</h1>
+        <div>
+            <span>Hello, {{user.username}}</span>
+            <img src="https://via.placeholder.com/40" alt="Profile Picture" class="profile-pic">
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="card">
+            <h2>Order Summary</h2>
+            <div class="stats">
+                <div>
+                    <strong>12</strong> Orders Placed
+                </div>
+                <div>
+                    <strong>3</strong> Pending Deliveries
+                </div>
+            </div>
+            <p>Track the status of your orders easily.</p>
+        </div>
+
+        <div class="card">
+            <h2>Wishlist</h2>
+            <p>Your saved items will appear here. Don't miss out on great deals!</p>
+        </div>
+
+        <div class="card">
+            <h2>Product Recommendations</h2>
+            <p>Get personalized product recommendations based on your interests.</p>
+            <div class="moving-text">🌟 Limited Offer: Get 20% off on your next purchase!</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

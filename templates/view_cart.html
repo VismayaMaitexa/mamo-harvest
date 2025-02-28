@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Cart</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #fff;
+            background-color: #6e6e76;
+            padding: 20px;
+            margin: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .cart-container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #6e6e76;
+            color: #fff;
+        }
+
+        table img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .quantity-input {
+            width: 60px;
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .total-price {
+            font-size: 1.5rem;
+            color: #8e44ad;
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .cta-btn {
+            background-color: #6e6e76;
+            color: #fff;
+            padding: 12px 20px;
+            font-size: 1.2rem;
+            text-decoration: none;
+            border-radius: 6px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .cta-btn:hover {
+            background-color: #4e4e54;
+        }
+
+        .empty-cart {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #7f8c8d;
+            margin: 40px 0;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your Shopping Cart</h1>
+
+    <div class="cart-container">
+        {% if products %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                        <tr data-product-id="{{ product.id }}" data-stock="{{ product.quantity }}">
+                            <td><img src="{{ product.image.url }}" alt="{{ product.name }}"></td>
+                            <td>{{ product.name }}</td>
+                            <td>${{ product.price }}</td>
+                            <td>
+                                <input name="quantity" style=" width: 40px;" class="quantity-input" type="number" value="1" min="1" data-price="{{ product.price }}" oninput="updateSubtotal(this)"><label for=""> Kg</label>
+                                <div class="error-message" style="display:none;">Exceeds available stock!</div>
+                            </td>
+                            <td class="subtotal">${{ product.price }}</td>
+                            <td>
+                                <form action="{% url 'remove_from_cart' product.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer;">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="total-price">Total: $<span id="total-price">{{ total }}</span></div>
+
+            <a href="{% url 'proceed button' %}" class="cta-btn">Proceed to Checkout</a>
+        {% else %}
+            <p class="empty-cart">Your cart is empty.</p>
+        {% endif %}
+    </div>
+
+    <script>
+       
+       function updateSubtotal(input) {
+    const row = input.closest('tr');
+    const price = parseFloat(input.getAttribute('data-price'));
+    const stock = parseInt(row.getAttribute('data-stock'));
+    let quantity = parseInt(input.value) || 1;
+
+    // Check if the quantity exceeds the available stock
+    if (quantity > stock) {
+        input.value = stock; // Reset to the maximum stock
+        row.querySelector('.error-message').style.display = 'block'; // Show error message
+    } else {
+        row.querySelector('.error-message').style.display = 'none'; // Hide error message
+    }
+
+    // Re-calculate subtotal with the updated quantity
+    const subtotal = price * quantity;
+    row.querySelector('.subtotal').textContent = `$${subtotal.toFixed(2)}`;
+
+    // Update the total price
+    updateTotal();
+
+    // Update the cart backend
+    updateCartBackend(); // Ensure this is called here
+}
+
+function updateTotal() {
+    let total = 0;
+    document.querySelectorAll('tbody tr').forEach(row => {
+        const subtotal = parseFloat(row.querySelector('.subtotal').textContent.replace('$', '')) || 0;
+        total += subtotal;
+    });
+    document.getElementById('total-price').textContent = total.toFixed(2);
+}
+
+function updateCartBackend() {
+    const rows = document.querySelectorAll('tbody tr');
+    const cartData = {};
+
+    rows.forEach(row => {
+        const productId = row.getAttribute('data-product-id');
+        const quantityInput = row.querySelector('.quantity-input');
+        const quantity = parseInt(quantityInput.value) || 1;
+
+        cartData[productId] = quantity;
+    });
+
+    fetch('/update-cart/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify(cartData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+    </script>
+</body>
+</html>

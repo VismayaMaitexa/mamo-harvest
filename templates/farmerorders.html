@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer's Orders</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 50px;
+        }
+
+        /* Container for the order history */
+        .order-container {
+            width: 80%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Order list styles */
+        ul.order-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul.order-list li {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        ul.order-list li strong {
+            color: #333;
+        }
+
+        /* Order details */
+        .order-details {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .order-details span {
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* No orders message */
+        .no-orders {
+            text-align: center;
+            color: #888;
+            font-size: 16px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .order-container {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Order History for Your Products</h1>
+
+    <div class="order-container">
+        {% if orders %}
+            <ul class="order-list">
+            {% for order in orders %}
+                <li>
+                    <strong>Order ID:</strong> {{ order.id }}
+                    <strong>Product Name:{% for item in order.products.all %} </strong> {{ item.name }}<br> {% endfor %}  <!-- Assuming a relationship to Product -->
+                    <div class="order-details">
+                        <span><strong>Order Date:</strong> {{ order.date|date:"F j, Y, g:i a" }}</span> <!-- Formatting the date -->
+                        <span><strong>Status:</strong> {{ order.status }}</span>  <!-- If you have a status field -->
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p class="no-orders">No orders found for your products.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

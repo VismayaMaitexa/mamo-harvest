@@ -1,0 +1,152 @@
+<!-- wishlist.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Wishlist</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Basic Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .wishlist-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .product-card {
+            width: 200px; /* Set a fixed width for the product card */
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 150px; /* Set a fixed height for the product image */
+            background-color: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Make sure the image scales proportionally */
+        }
+
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .remove-from-wishlist {
+            padding: 8px 16px;
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .remove-from-wishlist:hover {
+            background-color: #c0392b;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .product-card {
+                width: 150px; /* Adjust width for smaller screens */
+            }
+
+            .product-image {
+                height: 120px; /* Adjust image size for smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Your Wishlist</h1>
+
+    <div class="wishlist-container">
+        {% for product in wishlist.products.all %}
+        <div class="product-card">
+            <!-- Product Image -->
+            <div class="product-image">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-color: #ddd;">
+                        <span>No Image</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Product Name -->
+            <div class="product-name">{{ product.name }}</div>
+
+            <!-- Product Price -->
+            <div class="product-price"> ₹{{ product.price }}</div>
+
+            <!-- Remove from Wishlist Button -->
+            <button class="remove-from-wishlist" data-product-id="{{ product.id }}">Remove</button>
+        </div>
+        {% empty %}
+        <p>Your wishlist is empty.</p>
+        {% endfor %}
+    </div>
+
+    <script>
+        // Add/remove from wishlist (similar to the product page)
+        document.querySelectorAll('.remove-from-wishlist').forEach(button => {
+            button.addEventListener('click', function(event) {
+                var productId = this.getAttribute('data-product-id');
+                var url = "/wishlist/add_remove/" + productId + "/";
+
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Refresh the page or update the DOM to reflect changes
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

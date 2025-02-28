@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Harvest Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            display: flex;
+            background-color: #9fb7e7;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 240px;
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+            color: #f3f4f6;
+        }
+
+        .sidebar a {
+            color: #f3f4f6;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-radius: 5px;
+            transition: background 0.3s, padding-left 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: #4f46e5;
+            padding-left: 20px;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-container {
+            margin-left: 260px;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #4f46e5;
+            color: #ffffff;
+        }
+
+        table tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        table td a.btn {
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: #2563eb;
+            color: #ffffff;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-danger {
+            background-color: #dc2626;
+            color: #ffffff;
+            transition: background 0.3s;
+        }
+
+        .btn-danger:hover {
+            background-color: #b91c1c;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .dashboard-container {
+                margin-left: 0;
+                padding: 10px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Harvest Hub Admin</h2>
+        <a href="{%url 'farmer' %}"><i class="fas fa-users"></i> Farmers</a>    
+        <a href="{%url 'user' %}"><i class="fas fa-user"></i> User</a>
+        <a href="{%url 'order' %}"><i class="fas fa-shopping-cart"></i> Orders</a>
+        <a href="{% url 'feedbacks' %}"><i class="fas fa-comment-dots"></i> Feedback</a>
+        <a href="{%url 'back' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <h2>Farmers Management</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>Address</th>
+                        <th>Update</th>
+                        <th>Delete</th>
+                        <th>Certificate View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for farmer in farmers %}
+                    <tr>
+                        <td>{{ farmer.user.username }}</td>
+                        <td>{{ farmer.mobile }}</td>
+                        <td>{{ farmer.address }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="{%url 'update_farmer' farmer.pk %}">
+                                <i class="fa fa-edit"></i> Edit
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn btn-danger btn-sm" href="{%url 'delete-farmer' farmer.id %}">
+                                <i class="fa fa-trash"></i> Delete
+                            </a>
+                        </td>
+                        <td>
+                            {% if farmer.certificate %}
+                            <a class="btn btn-primary btn-sm" href="{{ farmer.certificate.url }}" target="_blank">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                            {% else %}
+                            No Certificate
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

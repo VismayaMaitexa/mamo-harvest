@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Farmer Profile</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 5px;
+            display: block;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 12px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            border: none;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Update Profile</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Username -->
+            <div class="form-group">
+                <label for="id_username">Username</label>
+                {{ form.username }}
+            </div>
+            
+            <!-- First Name -->
+            <div class="form-group">
+                <label for="id_first_name">First Name</label>
+                {{ form.first_name }}
+            </div>
+            
+            <!-- Last Name -->
+            <div class="form-group">
+                <label for="id_last_name">Last Name</label>
+                {{ form.last_name }}
+            </div>
+            
+            <!-- Profile Picture -->
+            <div class="form-group">
+                <label for="id_profile_pic">Profile Picture</label>
+                {{ form.profile_pic }}
+            </div>
+            
+            <!-- Address -->
+            <div class="form-group">
+                <label for="id_address">Address</label>
+                {{ form.address }}
+            </div>
+            
+            <!-- Mobile Number -->
+            <div class="form-group">
+                <label for="id_mobile">Mobile Number</label>
+                {{ form.mobile }}
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="btn">Save Changes</button>
+        </form>
+    </div>
+</body>
+</html>

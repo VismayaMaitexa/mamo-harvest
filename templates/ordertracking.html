@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Order History</title>
+</head>
+<body>
+    <h1>Your Order History</h1>
+
+    {% if bookings %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Tracking Number</th>
+                    <th>Total</th>
+                    <th>Products</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.id }}</td>
+                        <td>{{ booking.name }}</td>
+                        <td>{{ booking.shipping_address }}</td>
+                        <td>{{ booking.get_order_status }}</td>
+                        <td>{{ booking.date }}</td>
+                        <td>{{ booking.tracking_number }}</td>
+                        <td>{{ booking.get_order_total }}</td>
+                        <td>
+                            <ul>
+                                {% for product in booking.products.all %}
+                                    <li>{{ product.name }} - ${{ product.price }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You have no orders yet.</p>
+    {% endif %}
+</body>
+</html>

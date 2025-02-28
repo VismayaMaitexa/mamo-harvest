@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Form</title>
+    <style>
+        /* General styles */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #808080; /* Gray background */
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Dimmed overlay */
+        }
+
+        /* Feedback container styling */
+        .feedback-container {
+            position: fixed;
+            background-color: #ffffff;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 1000;
+            min-width: 300px;
+        }
+
+        .feedback-container h1 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .feedback-container label {
+            font-size: 1em;
+            margin-bottom: 10px;
+            display: block;
+            text-align: left;
+        }
+
+        .feedback-container textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+            margin-bottom: 15px;
+        }
+
+        .feedback-container button {
+            margin: 5px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            color: white;
+        }
+
+        .feedback-container .submit-btn {
+            background-color: #e74c3c;
+        }
+
+        .feedback-container .close-btn {
+            background-color: #3498db;
+        }
+
+        .feedback-container button:hover {
+            opacity: 0.9;
+        }
+
+        /* Popup Styling */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 1001;
+        }
+
+        .popup h3 {
+            margin: 0 0 10px;
+            font-size: 1.5em;
+            color: #2ecc71;
+        }
+
+        .popup button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .popup button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+
+    <!-- Feedback Form -->
+    <div class="feedback-container">
+        <h1>Feedback Form</h1>
+        <form id="feedback-form" method="post" action="{% url 'add_feedback' %}">
+            {% csrf_token %}
+            <label for="feedback">Your Feedback:</label>
+            <textarea name="comment" id="comment" rows="4"></textarea>
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <button type="submit" class="submit-btn">Submit</button>
+            <button type="button" class="close-btn" id="close-form">Close</button>
+        </form>
+    </div>
+
+    <!-- Popup Message -->
+    <div class="popup" id="success-popup">
+        <h3>Feedback Submitted Successfully!</h3>
+        <button id="close-popup">Ok</button>
+    </div>
+
+    <!-- <script>
+        // Close form button functionality
+        const closeFormBtn = document.getElementById('close-form');
+        const feedbackContainer = document.querySelector('.feedback-container');
+        const overlay = document.querySelector('.overlay');
+
+        closeFormBtn.addEventListener('click', function () {
+            feedbackContainer.style.display = 'none';
+            overlay.style.display = 'none';
+        });
+
+        // Show popup on submit
+        const form = document.getElementById('feedback-form');
+        const popup = document.getElementById('success-popup');
+        const closePopupBtn = document.getElementById('close-popup');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent normal form submission
+
+            // Show popup
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
+        });
+
+        closePopupBtn.addEventListener('click', function () {
+            // Hide popup
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+
+            // Optionally submit the form if needed
+            // form.submit();
+        });
+    </script> -->
+</body>
+</html>
